@@ -1,4 +1,6 @@
-// ===== Anonymous Username =====
+window.onload = () => {
+
+// ===== Anonymous User =====
 let user = localStorage.getItem("anon");
 if(!user){
   user = "anon_" + Math.random().toString(36).slice(2,7);
@@ -6,8 +8,12 @@ if(!user){
 }
 
 // ===== Map =====
-const map = L.map('map').setView([20,0],2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+const map = L.map('map', {zoomControl:true}).setView([20,0],2);
+
+// Dark tiles
+const darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_dark/{z}/{x}/{y}{r}.png', {
+  maxZoom: 20, attribution:'&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+}).addTo(map);
 
 // ===== Heatmap =====
 let heatLayer; let heatOn=false;
@@ -25,11 +31,17 @@ async function loadPins(){
   } catch(e){ pins=[]; }
 }
 
-// ===== Draw pins =====
+// ===== Draw Pins =====
 function drawPins(){
   if(heatLayer) map.removeLayer(heatLayer);
   pins.forEach(p=>{
-    const m = L.circleMarker([p.lat,p.lng], {radius:6,color:p.color}).addTo(map);
+    const m = L.circleMarker([p.lat,p.lng], {
+      radius:8, 
+      color:p.color, 
+      className:"glow",
+      fillOpacity:0.8,
+      weight:2
+    }).addTo(map);
     m.bindPopup(`
       <b>${p.user}</b><br>${p.msg}<br>
       ${p.image?`<img src="${p.image}" width="100%">`:''}
@@ -37,6 +49,7 @@ function drawPins(){
       <div class="report" onclick="reportPin('${p.id}')">Report</div>
     `);
   });
+
   if(heatOn){
     const heatData = pins.map(p=>[p.lat,p.lng,0.5]);
     heatLayer = L.heatLayer(heatData).addTo(map);
@@ -74,7 +87,7 @@ async function savePin(lat,lng){
   if(file){
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "unsigned_preset"); unsigned_preset
+    formData.append("upload_preset", "unsigned_preset"); // unsigned_preset
     const res = await fetch("https://api.cloudinary.com/v1_1/dluucrgrh/upload",{
       method:"POST", body: formData
     });
@@ -97,7 +110,7 @@ async function savePin(lat,lng){
   pins.push(newPin);
   drawPins();
 
-  // Save JSON back to Glitch/Vercel JSON endpoint (or local edit)
+  // Save JSON back to data.json (Vercel deployment)
   await fetch("data.json",{
     method:"PUT",
     headers:{"Content-Type":"application/json"},
@@ -122,7 +135,9 @@ function reportPin(id){ alert("Reported"); }
 
 // ===== Heatmap & Dark Mode =====
 function toggleHeat(){ heatOn=!heatOn; drawPins(); }
-function toggleDark(){ document.body.classList.toggle("dark"); }
+function toggleDark(){ document.body.classList.toggle("dark"); document.body.classList.toggle("light"); }
 
 // ===== Initialize =====
 loadPins();
+
+};
