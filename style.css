@@ -1,0 +1,9 @@
+html, body {margin:0; padding:0; font-family: system-ui, sans-serif;}
+#map {height:100vh;}
+header {position: fixed; top:0; width:100%; display:flex; gap:6px; padding:8px; background: rgba(255,255,255,0.9); z-index:999;}
+#search {flex:1; padding:8px;}
+.popup {width:240px;}
+.popup textarea, .popup select, .popup input, .popup button {width:100%; margin-top:6px; padding:6px;}
+.like {cursor:pointer; color:red;}
+.report {font-size:12px; color:gray; cursor:pointer;}
+.dark {background:#111; color:#eee;}
