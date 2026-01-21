@@ -1,9 +1,11 @@
-html, body {margin:0; padding:0; font-family: system-ui, sans-serif;}
+html, body {margin:0; padding:0; font-family: system-ui, sans-serif; height:100%; background:#111;}
 #map {height:100vh;}
-header {position: fixed; top:0; width:100%; display:flex; gap:6px; padding:8px; background: rgba(255,255,255,0.9); z-index:999;}
-#search {flex:1; padding:8px;}
-.popup {width:240px;}
-.popup textarea, .popup select, .popup input, .popup button {width:100%; margin-top:6px; padding:6px;}
+header {position:fixed; top:0; width:100%; display:flex; gap:6px; padding:8px; background: rgba(0,0,0,0.7); z-index:999; color:#fff;}
+#search {flex:1; padding:8px; border-radius:6px; border:none;}
+.popup {width:240px; color:#fff;}
+.popup textarea, .popup select, .popup input, .popup button {width:100%; margin-top:6px; padding:6px; border-radius:4px;}
 .like {cursor:pointer; color:red;}
 .report {font-size:12px; color:gray; cursor:pointer;}
 .dark {background:#111; color:#eee;}
+.light {background:#f8f8f8; color:#111;}
+.leaflet-marker-icon.glow {filter: drop-shadow(0 0 8px #00f) drop-shadow(0 0 8px #0ff);}
